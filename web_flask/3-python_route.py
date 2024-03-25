@@ -1,33 +1,40 @@
 #!/usr/bin/python3
+"""Start web application with two routings
 """
-A script that starts a Flask web application
-"""
-from flask import Flask
-from sys import argv
 
+from flask import Flask
 app = Flask(__name__)
 
 
-@app.route("/", strict_slashes=False)
+@app.route('/')
 def hello():
-    return "Hello HBNB!"
+    """Return string when route queried
+    """
+    return 'Hello HBNB!'
 
 
-@app.route("/hbnb", strict_slashes=False)
+@app.route('/hbnb')
 def hbnb():
-    return "HBNB"
+    """Return string when route queried
+    """
+    return 'HBNB'
 
 
-@app.route("/c/<text>", strict_slashes=False)
-def display_c(text):
-    return f"C {text.replace('_', ' ')}"
+@app.route('/c/<text>')
+def c_is_fun(text):
+    """Return reformatted text
+    """
+    return 'C ' + text.replace('_', ' ')
 
 
-@app.route("/python", defaults={'text': "is cool"}, strict_slashes=False)
-@app.route("/python/<text>", strict_slashes=False)
-def display_py(text):
-    return f"Python {text.replace('_', ' ')}"
+@app.route('/python/')
+@app.route('/python/<text>')
+def python_with_text(text='is cool'):
+    """Reformat text based on optional variable
+    """
+    return 'Python ' + text.replace('_', ' ')
 
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", port=5000)
+    app.url_map.strict_slashes = False
+    app.run(host='0.0.0.0', port=5000)
