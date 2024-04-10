@@ -62,6 +62,7 @@ button:hover {
 
 .popover::-webkit-scrollbar {
     display: none;
+}
 
 .locations:hover .popover, .amenities:hover .popover {
     display: block;
@@ -81,4 +82,4 @@ button:hover {
 
 .amenities .popover li {
     margin-left: 15%; /* Justify li. */
-}}
+}
