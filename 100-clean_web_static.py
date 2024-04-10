@@ -1,21 +1,30 @@
 #!/usr/bin/python3
-""" Fabric script that distributes an archive to a web server. """
-from fabric.api import env, local, put, run # type: ignore
-from datetime import datetime
-from os.path import exists
-env.hosts = ["35.237.133.118", "3.90.191.97"]
+# Fabfile to delete out-of-date archives.
+import os
+from fabric.api import * # type: ignore
+
+env.hosts = ["104.196.168.90", "35.196.46.172"] # type: ignore
+
 
 def do_clean(number=0):
-    """ Delete out-of-date files. """
-    n = int(number)
-    with lcd("versions"): # type: ignore
-        if n == 0 or n == 1:
-            local("ls -t | tail -n +2 | xargs rm -rfv")
-        else:
-            local("ls -t | tail -n + {} | xargs rm -rfv".format(n + 1))
+    """Delete out-of-date archives.
 
-    with cd("/data/web_static/releases/"): # type: ignore
-        if n == 0 or n == 1:
-            run("ls -t | tail -n +2 | xargs rm -rfv")
-        else:
-            run("ls -t | tail -n {} | xargs rm -rfv".format(n + 1))
+    Args:
+        number (int): The number of archives to keep.
+
+    If number is 0 or 1, keeps only the most recent archive. If
+    number is 2, keeps the most and second-most recent archives,
+    etc.
+    """
+    number = 1 if int(number) == 0 else int(number)
+
+    archives = sorted(os.listdir("versions"))
+    [archives.pop() for i in range(number)]
+    with lcd("versions"): # type: ignore
+        [local("rm ./{}".format(a)) for a in archives] # type: ignore
+
+    with cd("/data/web_static/releases"): # type: ignore
+        archives = run("ls -tr").split() # type: ignore
+        archives = [a for a in archives if "web_static_" in a]
+        [archives.pop() for i in range(number)]
+        [run("rm -rf ./{}".format(a)) for a in archives] # type: ignore
