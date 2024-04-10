@@ -1,72 +1,31 @@
 #!/usr/bin/python3
 """
-Module to initiate a flask app
+Script to start a Flask web application
 """
 
-
-from flask import Flask # type: ignore
-from flask import render_template # type: ignore
-
+from flask import Flask, render_template
+from models import storage
+from models.state import State
 
 app = Flask(__name__)
 
 
-@app.route('/', strict_slashes=False)
-def hello_hbnb():
+@app.route('/states_list', strict_slashes=False)
+def states_list():
     """
-    Index route
+    Route to display a HTML page with a list of all State objects
     """
-    return 'Hello HBNB!'
+    states = storage.all(State).values()
+    return render_template('7-states_list.html', states=states)
 
 
-@app.route('/hbnb', strict_slashes=False)
-def hbnb():
+@app.teardown_appcontext
+def teardown(exception):
     """
-    HBNB route
+    Teardown method to remove the current SQLAlchemy Session
     """
-    return 'HBNB'
+    storage.close()
 
 
-@app.route('/c/<text>', strict_slashes=False)
-def c_is_fun(text):
-    """
-    Dynamic routing
-    """
-    return 'C ' + text.replace('_', ' ')
-
-
-@app.route('/python/')
-@app.route('/python/<text>', strict_slashes=False)
-def python_is_cool(text='is cool'):
-    """
-    Dynamic routing
-    """
-    return 'Python ' + text.replace('_', ' ')
-
-
-@app.route('/number/<int:n>', strict_slashes=False)
-def is_number(n):
-    """
-    Dynamic routing
-    """
-    return str(n) + ' is a number'
-
-
-@app.route('/number_template/<int:n>', strict_slashes=False)
-def number_template(n):
-    """
-    Dynamic routing and template rendering
-    """
-    return render_template('5-number.html', n=n)
-
-
-@app.route('/number_odd_or_even/<int:n>', strict_slashes=False)
-def odd_or_even(n):
-    """
-    Dynamic routing and template rendering
-    """
-    return render_template('6-number_odd_or_even.html', n=n)
-
-
-if __name__ == "__main__":
+if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
