@@ -1,33 +1,72 @@
 #!/usr/bin/python3
 """
-Simple module that starts a Flask web application
-Starting to display formatted text and conditional message
-Addind basic template
+Module to initiate a flask app
 """
-from flask import Flask, render_template # type: ignore
-from models import storage
-from models.state import State
+
+
+from flask import Flask # type: ignore
+from flask import render_template # type: ignore
+
 
 app = Flask(__name__)
 
 
-@app.teardown_appcontext
-def handle_appcontext(self):
+@app.route('/', strict_slashes=False)
+def hello_hbnb():
     """
-    Method for handling app context
+    Index route
     """
-    storage.close()
+    return 'Hello HBNB!'
 
 
-@app.route('/states_list', strict_slashes=False)
-def list_states():
+@app.route('/hbnb', strict_slashes=False)
+def hbnb():
     """
-    Displays 7-states_list html page
+    HBNB route
     """
-    states = storage.all(State).values()
-    return render_template('7-states_list.html', states=states)
+    return 'HBNB'
+
+
+@app.route('/c/<text>', strict_slashes=False)
+def c_is_fun(text):
+    """
+    Dynamic routing
+    """
+    return 'C ' + text.replace('_', ' ')
+
+
+@app.route('/python/')
+@app.route('/python/<text>', strict_slashes=False)
+def python_is_cool(text='is cool'):
+    """
+    Dynamic routing
+    """
+    return 'Python ' + text.replace('_', ' ')
+
+
+@app.route('/number/<int:n>', strict_slashes=False)
+def is_number(n):
+    """
+    Dynamic routing
+    """
+    return str(n) + ' is a number'
+
+
+@app.route('/number_template/<int:n>', strict_slashes=False)
+def number_template(n):
+    """
+    Dynamic routing and template rendering
+    """
+    return render_template('5-number.html', n=n)
+
+
+@app.route('/number_odd_or_even/<int:n>', strict_slashes=False)
+def odd_or_even(n):
+    """
+    Dynamic routing and template rendering
+    """
+    return render_template('6-number_odd_or_even.html', n=n)
 
 
 if __name__ == "__main__":
-    """ app listening on host 0.0.0.0 and port 5000 """
-    app.run(host='0.0.0.0', port='5000')
+    app.run(host='0.0.0.0', port=5000)
