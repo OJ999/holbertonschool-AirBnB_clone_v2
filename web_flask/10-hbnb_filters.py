@@ -3,7 +3,7 @@
 Starts a Flask web application to display filters for states, cities, and amenities.
 """
 
-from flask import Flask, render_template
+from flask import Flask, render_template # type: ignore
 from models import storage
 
 app = Flask(__name__)
