@@ -1,52 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <link rel="stylesheet" type="text/css" href="static/styles/4-common.css">
-    <link rel="stylesheet" type="text/css" href="static/styles/3-header.css">
-    <link rel="stylesheet" type="text/css" href="static/styles/3-footer.css">
-    <link rel="stylesheet" type="text/css" href="static/styles/6-filters.css">
-    <link rel="icon" href="static/images/icon.png" />
-    <title>HBNB</title>
+    <!-- Metadata -->
+    <meta charset="utf-8">
+    <meta name="keywords" content="HTML, CSS">
+    <meta name="description" content="AirBnB website clone.">
+    <meta name="autor" content="Yesid A. López V.">
+    <!-- References to styles sheets. -->
+    <link href="../static/styles/4-common.css" rel="stylesheet">
+    <link href="../static/styles/3-footer.css" rel="stylesheet">
+    <link href="../static/styles/3-header.css" rel="stylesheet">
+    <link href="../static/styles/6-filters.css" rel="stylesheet">
+    <!-- Web site logo and name of the webpage's title(tab). -->
+    <link rel="icon" type="image/png" href="../static/images/icon.png">
+    <title> AirBnB clone</title>
   </head>
   <body>
-    <header>
+    <header> <!-- Header. -->
+      <!-- Logo. -->
       <div class="logo"></div>
     </header>
-    <div class="container">
-      <section class="filters">
-	<div class="locations">
+    <div class="container"> <!-- main, in this case, "Container" -->
+      <section class="filters"> <!-- Section with search button. -->
+	<button>Search</button>
+	<div class="locations"> <!-- States. -->
 	  <h3>States</h3>
 	  <h4>&nbsp;</h4>
-	  <div class="popover">
-	  {% for state in states.values()|sort(attribute='name') %}
-      <ul>
-	      <li>
-		      <h2>{{ state.name }}</h2>
-		      {% for city in state.cities|sort(attribute='name') %}
+	  <ul class="popover">
+	    {% for state in states | sort(attribute="name") %}
+            <li>
+              <h2>{{ state.name}}</h2>
               <ul>
-		          <li><div class="list_content">{{ city.name }}</div></li>
+                {% for city in state.cities | sort(attribute="name") %}
+                <li>{{ city.name }}</li>
+                {% endfor %}
               </ul>
-			  {% endfor %}
-	      </li>
-      </ul>
-	  {% endfor %}
-	  </div>
+            </li>
+            {% endfor %}
+	  </ul>
 	</div>
-	<div class="amenities">
+	<div class="amenities"> <!-- Amenities. -->
 	  <h3>Amenities</h3>
 	  <h4>&nbsp;</h4>
-	  <div class="popover">
-      {% for amenity in amenities.values()|sort(attribute='name') %}
-      <ul>
-	      <li><div class="list_content">{{ amenity.name }}</div></li>
-      </ul>
-	  {% endfor %}
-      </div>
+	  <ul class="popover">
+	    {% for amenity in amenities | sort(attribute="name") %}
+            <li>{{ amenity.name }}</li>
+            {% endfor %}
+	  </ul>
 	</div>
-	<button type="button">Search</button>
       </section>
     </div>
-    <footer>
+    <footer> <!-- Footer -->
       <p>Holberton School</p>
     </footer>
   </body>
