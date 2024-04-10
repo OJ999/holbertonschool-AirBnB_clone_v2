@@ -1,46 +1,54 @@
 #!/usr/bin/python3
-"""Start web application with two routings
+"""
+Script to start a Flask web application
 """
 
 from flask import Flask
+from urllib.parse import unquote
+
 app = Flask(__name__)
 
 
-@app.route('/')
-def hello():
-    """Return string when route queried
+@app.route('/', strict_slashes=False)
+def hello_hbnb():
+    """
+    Route to display 'Hello HBNB!'
     """
     return 'Hello HBNB!'
 
 
-@app.route('/hbnb')
-def hbnb():
-    """Return string when route queried
+@app.route('/hbnb', strict_slashes=False)
+def display_hbnb():
+    """
+    Route to display 'HBNB'
     """
     return 'HBNB'
 
 
-@app.route('/c/<text>')
-def c_is_fun(text):
-    """Return reformatted text
+@app.route('/c/<text>', strict_slashes=False)
+def display_c_text(text):
     """
-    return 'C ' + text.replace('_', ' ')
-
-
-@app.route('/python/')
-@app.route('/python/<text>')
-def python_with_text(text='is cool'):
-    """Reformat text based on optional variable
+    Route to display 'C ', followed by the value of the text variable
     """
-    return 'Python ' + text.replace('_', ' ')
+    return 'C {}'.format(unquote(text).replace('_', ' '))
 
 
-@app.route('/number/<int:n>')
-def number(n=None):
-    """Allow request if path variable is a valid integer
+@app.route('/python/', defaults={'text': 'is cool'}, strict_slashes=False)
+@app.route('/python/<text>', strict_slashes=False)
+def display_python_text(text):
     """
-    return str(n) + ' is a number'
+    Route to display 'Python ', followed by the value of the text variable
+    """
+    return 'Python {}'.format(unquote(text).replace('_', ' '))
+
+
+@app.route('/number/<int:n>', strict_slashes=False)
+def display_number(n):
+    """
+    Route to display 'n is a number' only if n is an integer
+    """
+    return '{} is a number'.format(n)
+
 
 if __name__ == '__main__':
-    app.url_map.strict_slashes = False
     app.run(host='0.0.0.0', port=5000)

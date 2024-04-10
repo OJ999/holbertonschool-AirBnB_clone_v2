@@ -3,7 +3,7 @@
 Script to start a Flask web application
 """
 
-from flask import Flask
+from flask import Flask # type: ignore
 from urllib.parse import unquote
 
 app = Flask(__name__)
