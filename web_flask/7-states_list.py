@@ -3,7 +3,7 @@
 Script to start a Flask web application
 """
 
-from flask import Flask, render_template
+from flask import Flask, render_template # type: ignore
 from models import storage
 
 app = Flask(__name__)
